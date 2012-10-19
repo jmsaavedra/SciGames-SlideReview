@@ -59,9 +59,9 @@ public class LoginActivity extends Activity implements Runnable, SciGamesListene
 	
 	
     private boolean debug = false; //for debug info popups
-    private boolean debugFakeBracelet = true; //to send fake bracelet Ids
-    private String debugBracelet1 = "500315affffffe5";
-    private String debugBracelet2 = "500315c37"; //500315518 (yellow) //500315affffffe5 (green) //5006affffffc3ffffffd9 (red) //500315c37 (blue)
+    private boolean debugFakeBracelet = false; //to send fake bracelet Ids
+    private String debugBracelet1 = "5006affffffc3ffffffd9";//"500315affffffe5";
+    private String debugBracelet2 = "500315641"; //500315518 (yellow) //500315affffffe5 (green) //5006affffffc3ffffffd9 (red) //500315c37 (blue)
     private String debugFabricID = "0056ffffff9affffff90";
     //private int debugSlideLevel = 2;
     private int debugMassVal = 65;

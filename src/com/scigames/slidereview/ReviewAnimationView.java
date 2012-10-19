@@ -240,6 +240,7 @@ class ReviewAnimationView extends SurfaceView implements SurfaceHolder.Callback 
         private int thermalE = 0;
         private int tempTherm = 0;
         private int kineticE = 0;
+        private int tempKinetic = 0;
         private long elapsedTimeCount = 0;
         
     	int groupX = 921;
@@ -322,6 +323,7 @@ class ReviewAnimationView extends SurfaceView implements SurfaceHolder.Callback 
             mEngineFiring = true;
             
             tempTherm = 0;
+            tempKinetic = 0;
         	groupX = 921; //for the energy slide
         	groupY = 260;
         	
@@ -530,20 +532,20 @@ class ReviewAnimationView extends SurfaceView implements SurfaceHolder.Callback 
         	isScene2 = true;
         }
         
-        public void setDifficulty(int difficulty) {
-            synchronized (mSurfaceHolder) {
-                mDifficulty = difficulty;
-            }
-        }
-
-        /**
-         * Sets if the engine is currently firing.
-         */
-        public void setFiring(boolean firing) {
-            synchronized (mSurfaceHolder) {
-                mEngineFiring = firing;
-            }
-        }
+//        public void setDifficulty(int difficulty) {
+//            synchronized (mSurfaceHolder) {
+//                mDifficulty = difficulty;
+//            }
+//        }
+//
+//        /**
+//         * Sets if the engine is currently firing.
+//         */
+//        public void setFiring(boolean firing) {
+//            synchronized (mSurfaceHolder) {
+//                mEngineFiring = firing;
+//            }
+//        }
 
         /**
          * Used to signal the thread whether it should be running or not.
@@ -674,7 +676,7 @@ class ReviewAnimationView extends SurfaceView implements SurfaceHolder.Callback 
             
             /* energy going down slide */
             if(isScene2){
-            	int energyRadius = 10;
+            	int energyRadius = 18; // radius of energy on horizontal graph page
             	
             	if(groupX > 300){
             		groupX -= 1.1;//(int)(groupX*0.007);
@@ -682,21 +684,32 @@ class ReviewAnimationView extends SurfaceView implements SurfaceHolder.Callback 
             	if(groupY < 700){
             		groupY += 2;//(int)(groupY*0.009);
             	}
-            	mStickFigure.setBounds(groupX, groupY, 30, 30);
-            	mStickFigure.draw(canvas);
             	
-            	if(elapsedTimeCount%10 == 0){
-            		if(tempTherm<thermalE) tempTherm++;
+            	if(elapsedTimeCount%10 == 0){ //drawing the bars of dots
+            		if (tempKinetic<kineticE){
+            			tempKinetic++;
+            		}
+ 					else if(tempTherm<thermalE){
+						tempTherm++;
+					}
             	}
-            	for(int i=0; i<tempTherm; i++){
-            		canvas.drawCircle(921-(int)(i*energyRadius*1.65), 260+(int)(i*energyRadius*1.8), energyRadius, mThermalPaint);
-            	}
-            	for(int i=0; i<kineticE; i++){
-            		canvas.drawCircle((int)(groupX+groupXRandom[i]), (int)(groupY-groupYRandom[i]), energyRadius, mKineticPaint);
-            	}//300 y700
-            	for(int i=0; i<(int)(potentialE-(tempTherm/3+kineticE/2)); i++){
-            		canvas.drawCircle((int)(groupX+groupYRandom[i]), (int)(groupY-groupXRandom[i]), energyRadius, mPotentialPaint);
-            	}
+    			for(int i=0; i<tempKinetic; i++){
+    				canvas.drawCircle(225+i*50, 315, energyRadius, mKineticPaint);
+    			}
+				for(int i=0; i<tempTherm; i++){
+					canvas.drawCircle(225+i*50, 370, energyRadius, mThermalPaint);
+				}
+            	
+//            	/* old slide animation */
+//            	for(int i=0; i<tempTherm; i++){
+//            		canvas.drawCircle(921-(int)(i*energyRadius*1.65), 260+(int)(i*energyRadius*1.8), energyRadius, mThermalPaint);
+//            	}
+//            	for(int i=0; i<kineticE; i++){
+//            		canvas.drawCircle((int)(groupX+groupXRandom[i]), (int)(groupY-groupYRandom[i]), energyRadius, mKineticPaint);
+//            	}//300 y700
+//            	for(int i=0; i<(int)(potentialE-(tempTherm/3+kineticE/2)); i++){
+//            		canvas.drawCircle((int)(groupX+groupYRandom[i]), (int)(groupY-groupXRandom[i]), energyRadius, mPotentialPaint);
+//            	}
             	
             }
             
@@ -713,31 +726,31 @@ class ReviewAnimationView extends SurfaceView implements SurfaceHolder.Callback 
             	int fillBarH = (int)(elapsedTimeCount/5);
             	if(fillBarH > thermalE*5) fillBarH = thermalE*5;
 
-            	canvas.rotate(32, 402f, 572f);
-            	canvas.drawRect(402, 572, 422, 568-fillBarH, mThermalPaint) ; //Laser
+            	canvas.rotate(32, 397f, 560f);
+            	canvas.drawRect(397, 560, 422, 560-fillBarH, mThermalPaint) ; //Laser filling
             	canvas.restore();
             	
             	int fillHeight = (int)elapsedTimeCount/5;
             	if(fillHeight > thermalE*10) fillHeight = thermalE*10;
-            	canvas.drawRect(645, 690-fillHeight, 753, 690, mGoldPaint); //Piece
-            	int mLaserX = 392;
-            	int mLaserY = 438;
-            	int mLaserW = 124;
-            	int mLaserH = 154;
+            	canvas.drawRect(547, 675-fillHeight, 737, 680, mGoldPaint); //Gold flowing
+            	int mLaserX = 393;
+            	int mLaserY = 418;//423
+            	int mLaserW = 130;
+            	int mLaserH = 160;
             	
-            	int mPieceX = 640;
-            	int mPieceY = 510;
-            	int mPieceW = 127;
-            	int mPieceH = 193;
+            	int mPieceX = 540;
+            	int mPieceY = 470;
+            	int mPieceW = 205;
+            	int mPieceH = 220;
             
             	//int mLaserW = mLaserDrawable.  getIntrinsicWidth();
             	//int mLaserH = mLaserDrawable.getIntrinsicHeight();
             	//Log.d("laserW", String.valueOf(mLaserW));
             	//Log.d("laserX", String.valueOf(laserX));
             	
-            	mLaserDrawable.setBounds(mLaserX, mLaserY, mLaserX + mLaserW, mLaserY + mLaserH);
+            	mLaserDrawable.setBounds(mLaserX, mLaserY, mLaserX + mLaserW, mLaserY + mLaserH); //laser
             	mLaserDrawable.draw(canvas);
-            	mPieceDrawable.setBounds(mPieceX, mPieceY, mPieceX + mPieceW, mPieceY + mPieceH);
+            	mPieceDrawable.setBounds(mPieceX, mPieceY, mPieceX + mPieceW, mPieceY + mPieceH); //piece
             	mPieceDrawable.draw(canvas);
             }
             
