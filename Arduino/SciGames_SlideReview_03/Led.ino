@@ -4,7 +4,7 @@ All functions for RGB indicator LED on board
 
 ********************************/
 
-#define COMMON_ANODE   0 //set to '1' for common anode, '0' for common cathode!
+#define COMMON_ANODE   1 //set to '1' for common anode, '0' for common cathode!
 
 /**
 all the following for COMMON CATHODE RGB LED
@@ -50,7 +50,7 @@ void redOn(){
 
 void blueFader(){
 
-  if(currBlue > onVal || currBlue < 1){
+  if(currBlue < onVal || currBlue > 250){
     fadeAdder *= -1;
   }
   currBlue += fadeAdder;

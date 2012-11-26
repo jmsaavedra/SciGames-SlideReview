@@ -59,7 +59,7 @@ public class LoginActivity extends Activity implements Runnable, SciGamesListene
 	
 	
     private boolean debug = false; //for debug info popups
-    private boolean debugFakeBracelet = false; //to send fake bracelet Ids
+    private boolean debugFakeBracelet = true; //to send fake bracelet Ids
     private String debugBracelet1 = "5006affffffc3ffffffd9";//"500315affffffe5";
     private String debugBracelet2 = "500315641"; //500315518 (yellow) //500315affffffe5 (green) //5006affffffc3ffffffd9 (red) //500315c37 (blue)
     private String debugFabricID = "0056ffffff9affffff90";
@@ -283,64 +283,64 @@ public class LoginActivity extends Activity implements Runnable, SciGamesListene
 	    }
 	}
 	
-	private void sendFabricId(String braceletId){
-		Log.d(TAG, "hit checkFabrictId()");
-	    if (isNetworkAvailable()){
-		    task.cancel(true);
-		    //create a new async task for every time you hit login (each can only run once ever)
-		   	task = new SciGamesHttpPoster(LoginActivity.this,baseDbURL + "/pull/slide_session.php");
-		    //set listener
-	        task.setOnResultsListener(LoginActivity.this);
-	        //prepare key value pairs to send
-			String thisBracelet = braceletId.toLowerCase();
-			String[] keyVals = {"student_id", studentId, "fabric_rfid", thisBracelet}; 
-			if(debug){
-				infoDialog.setTitle("keyVals:");
-				infoDialog.setMessage(keyVals[0]+keyVals[1]+keyVals[2]+keyVals[3]);
-				infoDialog.show();
-			}
-			//create AsyncTask, then execute
-			AsyncTask<String, Void, JSONObject> serverResponse = null;
-			serverResponse = task.execute(keyVals);
-	    } else {
-			alertDialog.setMessage("You're not connected to the internet. Make sure this tablet is logged into a working Wifi Network.");
-			alertDialog.show();
-	    }
-	}
+//	private void sendFabricId(String braceletId){
+//		Log.d(TAG, "hit checkFabrictId()");
+//	    if (isNetworkAvailable()){
+//		    task.cancel(true);
+//		    //create a new async task for every time you hit login (each can only run once ever)
+//		   	task = new SciGamesHttpPoster(LoginActivity.this,baseDbURL + "/pull/slide_session.php");
+//		    //set listener
+//	        task.setOnResultsListener(LoginActivity.this);
+//	        //prepare key value pairs to send
+//			String thisBracelet = braceletId.toLowerCase();
+//			String[] keyVals = {"student_id", studentId, "fabric_rfid", thisBracelet}; 
+//			if(debug){
+//				infoDialog.setTitle("keyVals:");
+//				infoDialog.setMessage(keyVals[0]+keyVals[1]+keyVals[2]+keyVals[3]);
+//				infoDialog.show();
+//			}
+//			//create AsyncTask, then execute
+//			AsyncTask<String, Void, JSONObject> serverResponse = null;
+//			serverResponse = task.execute(keyVals);
+//	    } else {
+//			alertDialog.setMessage("You're not connected to the internet. Make sure this tablet is logged into a working Wifi Network.");
+//			alertDialog.show();
+//	    }
+//	}
 	
-	private void sendSlideData(String[] slideDataIn){ 
-		Log.d(TAG, "hit sendSlideData()");
-		
-	    if (isNetworkAvailable()){
-		    task.cancel(true);
-		    //create a new async task for every time you hit login (each can only run once ever)
-		   	task = new SciGamesHttpPoster(LoginActivity.this,baseDbURL + "/push/update_slide_data.php");
-		    //set listener
-	        task.setOnResultsListener(this);
-	        
-			//prepare key value pairs to send
-			String[] keyVals = {"slide_length",slideDataIn[0] , "slide_angle",slideDataIn[1] ,"start_time",slideDataIn[2],
-					"end_time",slideDataIn[3] ,"total_time",slideDataIn[4] ,"score",slideDataIn[5] ,"kinetic",slideDataIn[6],
-					"potential",slideDataIn[7] ,"thermal",slideDataIn[8] ,"attempt",slideDataIn[9],"level_completed",slideDataIn[10],
-					"slide_session_id", slideDataIn[11]};
-			if(debug){
-				for(int i=0; i<keyVals.length-1; i+=2)
-				slideSessionDataDebug += keyVals[i] + ": " + keyVals[i+1] + " \t ";
-			}
-	        
-			//String[] keyVals = {"slide_length","5","slide_angle","30","start_time","255","end_time","160","total_time","931","score","1221","kinetic","55","potential","45","thermal","49","attempt","2","level_completed","false","slide_session_id","502c5e65c0c0ba831d000000"}; 
-	        
-//			infoDialog.setTitle("keyVals:");
-//			infoDialog.setMessage(keyVals[0]+keyVals[1]+keyVals[2]+keyVals[3]);
-//			infoDialog.show();
-			//create AsyncTask, then execute
-			AsyncTask<String, Void, JSONObject> serverResponse = null;
-			serverResponse = task.execute(keyVals);
-	    } else {
-			alertDialog.setMessage("You're not connected to the internet. Make sure this tablet is logged into a working Wifi Network.");
-			alertDialog.show();
-	    }
-	}
+//	private void sendSlideData(String[] slideDataIn){ 
+//		Log.d(TAG, "hit sendSlideData()");
+//		
+//	    if (isNetworkAvailable()){
+//		    task.cancel(true);
+//		    //create a new async task for every time you hit login (each can only run once ever)
+//		   	task = new SciGamesHttpPoster(LoginActivity.this,baseDbURL + "/push/update_slide_data.php");
+//		    //set listener
+//	        task.setOnResultsListener(this);
+//	        
+//			//prepare key value pairs to send
+//			String[] keyVals = {"slide_length",slideDataIn[0] , "slide_angle",slideDataIn[1] ,"start_time",slideDataIn[2],
+//					"end_time",slideDataIn[3] ,"total_time",slideDataIn[4] ,"score",slideDataIn[5] ,"kinetic",slideDataIn[6],
+//					"potential",slideDataIn[7] ,"thermal",slideDataIn[8] ,"attempt",slideDataIn[9],"level_completed",slideDataIn[10],
+//					"slide_session_id", slideDataIn[11]};
+//			if(debug){
+//				for(int i=0; i<keyVals.length-1; i+=2)
+//				slideSessionDataDebug += keyVals[i] + ": " + keyVals[i+1] + " \t ";
+//			}
+//	        
+//			//String[] keyVals = {"slide_length","5","slide_angle","30","start_time","255","end_time","160","total_time","931","score","1221","kinetic","55","potential","45","thermal","49","attempt","2","level_completed","false","slide_session_id","502c5e65c0c0ba831d000000"}; 
+//	        
+////			infoDialog.setTitle("keyVals:");
+////			infoDialog.setMessage(keyVals[0]+keyVals[1]+keyVals[2]+keyVals[3]);
+////			infoDialog.show();
+//			//create AsyncTask, then execute
+//			AsyncTask<String, Void, JSONObject> serverResponse = null;
+//			serverResponse = task.execute(keyVals);
+//	    } else {
+//			alertDialog.setMessage("You're not connected to the internet. Make sure this tablet is logged into a working Wifi Network.");
+//			alertDialog.show();
+//	    }
+//	}
 
      OnClickListener mSlidePage = new OnClickListener(){
  	    public void onClick(View v) {
@@ -398,63 +398,64 @@ public class LoginActivity extends Activity implements Runnable, SciGamesListene
 			LoginActivity.this.startActivity(i);
 			Log.d(TAG,"...startActivity");
 			
-		} else if(currPage.equals("fabric")){
-			if(serverResponseJSON.isNull("fabric")){//if(serverResponseJSON.getString("fabric").equals(null)){ //
-				//this is not a fabric! kid swiped his bracelet instead or something ridiculous.
-				fabricDialog.setTitle("Not a Mat");
-				fabricDialog.setMessage("Try again, this time with a Mat tag, located at the corner of your chosen materal.");
-				fabricDialog.show();
-			} else {
-				fabricId.setVisibility(View.VISIBLE);
-				playBtn.setVisibility(View.VISIBLE);
-				String chosenFabric = serverResponseJSON.getJSONObject("fabric").getString("name");
-				chosenFabricValue = String.valueOf(serverResponseJSON.getJSONObject("fabric").getInt("value"));
-				thermalGoal = String.valueOf(serverResponseJSON.getJSONObject("slide_level").getJSONObject("ratio").getInt("thermal"));
-				kineticGoal = String.valueOf(serverResponseJSON.getJSONObject("slide_level").getJSONObject("ratio").getInt("kinetic"));
-				SlideLevel = String.valueOf(serverResponseJSON.getJSONObject("slide_level").getInt("level"));
-							
-//				slideGoals[0] = chosenFabricValue;
-//				slideGoals[1] = thermalGoal;
-//				slideGoals[2] =  kineticGoal;
-//				slideGoals[3] =  SlideLevel;
-				
-				//show fabric name
-				Resources res = getResources();
-				fabricId.setText(String.format(res.getString(R.string.fabric_choice), chosenFabric));
-				//get sessionID
-				slideSessionIdIn = slide_session[0];
-				if(debug){
-					infoDialog.setTitle("onResults currPage.equals fabric: ");
-					infoDialog.setMessage(serverResponseJSON.toString());
-					infoDialog.show();
-				}
-				
-			//	fabricId.setText(serverResponseJSON.toString());
-			//	slideSessionIdIn = slide_session[0];
-			}
 		} 
-		else if(currPage.equals("sliding")) {
-			if(debug){
-//				slideInstructions.setText(serverResponseJSON.toString());
-				infoDialog.setTitle("SlideData ResultsSucceeded");
-				infoDialog.setMessage(slideSessionDataDebug);
-				infoDialog.show();
-			}
-			
-	   		Intent i = new Intent(LoginActivity.this, LoginActivity.class); //reset the login page for next swipe in 
-			Log.d(TAG,"new Intent");
-			i.putExtra("page", "login");
-			Log.d(TAG,"startActivity...");
-			LoginActivity.this.startActivity(i);
-			Log.d(TAG,"...startActivity");
-		}
-		else if(currPage.equals("slideReview")){
-			if(debug){
-				infoDialog.setTitle("slideReview ResultsSucceeded");
-				infoDialog.setMessage(serverResponseJSON.toString());
-				infoDialog.show();
-			}
-		}
+//			else if(currPage.equals("fabric")){
+//			if(serverResponseJSON.isNull("fabric")){//if(serverResponseJSON.getString("fabric").equals(null)){ //
+//				//this is not a fabric! kid swiped his bracelet instead or something ridiculous.
+//				fabricDialog.setTitle("Not a Mat");
+//				fabricDialog.setMessage("Try again, this time with a Mat tag, located at the corner of your chosen materal.");
+//				fabricDialog.show();
+//			} else {
+//				fabricId.setVisibility(View.VISIBLE);
+//				playBtn.setVisibility(View.VISIBLE);
+//				String chosenFabric = serverResponseJSON.getJSONObject("fabric").getString("name");
+//				chosenFabricValue = String.valueOf(serverResponseJSON.getJSONObject("fabric").getInt("value"));
+//				thermalGoal = String.valueOf(serverResponseJSON.getJSONObject("slide_level").getJSONObject("ratio").getInt("thermal"));
+//				kineticGoal = String.valueOf(serverResponseJSON.getJSONObject("slide_level").getJSONObject("ratio").getInt("kinetic"));
+//				SlideLevel = String.valueOf(serverResponseJSON.getJSONObject("slide_level").getInt("level"));
+//							
+////				slideGoals[0] = chosenFabricValue;
+////				slideGoals[1] = thermalGoal;
+////				slideGoals[2] =  kineticGoal;
+////				slideGoals[3] =  SlideLevel;
+//				
+//				//show fabric name
+//				Resources res = getResources();
+//				fabricId.setText(String.format(res.getString(R.string.fabric_choice), chosenFabric));
+//				//get sessionID
+//				slideSessionIdIn = slide_session[0];
+//				if(debug){
+//					infoDialog.setTitle("onResults currPage.equals fabric: ");
+//					infoDialog.setMessage(serverResponseJSON.toString());
+//					infoDialog.show();
+//				}
+//				
+//			//	fabricId.setText(serverResponseJSON.toString());
+//			//	slideSessionIdIn = slide_session[0];
+//			}
+//		} 
+//		else if(currPage.equals("sliding")) {
+//			if(debug){
+////				slideInstructions.setText(serverResponseJSON.toString());
+//				infoDialog.setTitle("SlideData ResultsSucceeded");
+//				infoDialog.setMessage(slideSessionDataDebug);
+//				infoDialog.show();
+//			}
+//			
+//	   		Intent i = new Intent(LoginActivity.this, LoginActivity.class); //reset the login page for next swipe in 
+//			Log.d(TAG,"new Intent");
+//			i.putExtra("page", "login");
+//			Log.d(TAG,"startActivity...");
+//			LoginActivity.this.startActivity(i);
+//			Log.d(TAG,"...startActivity");
+//		}
+//		else if(currPage.equals("slideReview")){
+//			if(debug){
+//				infoDialog.setTitle("slideReview ResultsSucceeded");
+//				infoDialog.setMessage(serverResponseJSON.toString());
+//				infoDialog.show();
+//			}
+//		}
 	}
 	
 	public void failedQuery(String failureReason) {
@@ -627,7 +628,7 @@ public class LoginActivity extends Activity implements Runnable, SciGamesListene
 						if(currPage.equals("fabric")){ //actually will never be fabric in this app
 							Log.d(TAG, "checkFabricID: "+ fThisBracelet);
 							currRfid = fThisBracelet; //not a bracelet at all in this case
-							sendFabricId(fThisBracelet);
+							//sendFabricId(fThisBracelet);
 						}  else { //we are doing initial login=
 							Log.d(TAG, "from arduino fThisBraceletId: "+ fThisBracelet);
 							checkBraceletId(fThisBracelet);

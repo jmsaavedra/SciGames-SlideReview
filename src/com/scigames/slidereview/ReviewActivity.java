@@ -84,6 +84,7 @@ public class ReviewActivity extends Activity implements SciGamesListener{
     private float thermalMade;
     private float kineticMade;
     private float potentialMade;
+    private String sessionValid;
     //private boolean checkCompletion = false; /* temporary! */
     
     private String[] resultImg;
@@ -334,6 +335,7 @@ public class ReviewActivity extends Activity implements SciGamesListener{
 	        Log.d(TAG, "kineticGoal: "+slide_level[1]);
 	        Log.d(TAG, "thermalMade: "+slide_session[6]);
 	        Log.d(TAG, "kineticMade: "+slide_session[5]);
+	        Log.d(TAG, "session_valid: "+slide_session[9]);
 	        
 	        //get all the slide session data!
 	        score = slide_session[4];
@@ -343,86 +345,96 @@ public class ReviewActivity extends Activity implements SciGamesListener{
 	        thermalMade = Float.parseFloat(slide_session[6]); //5 in kin
 	        kineticMade = Float.parseFloat(slide_session[5]);
 	        potentialMade = Float.parseFloat(slide_session[7]);
+	        sessionValid = slide_session[9];
+	        Log.d(TAG, "session_valid_BOOL: "+String.valueOf(sessionValid));
+	        if(sessionValid.equals("false")){
+	        	
+	        	needSlideDataDialog.setTitle("Oops!");
+	        	needSlideDataDialog.setMessage("It looks like something went wrong during your turn. Go back up and try your turn again!");
+	        	needSlideDataDialog.show();
+	        } else {
 	        
-//	        if(levelCompleted && !checkCompletion){ //this is temporary!!
-//	    	    if (isNetworkAvailable()){
-//	    		    task.cancel(true);
-//	    		    //create a new async task for every time you hit login (each can only run once ever)
-//	    		   	task = new SciGamesHttpPoster(ReviewActivity.this,"http://mysweetwebsite.com/pull/slide_results.php");
-//	    		    //set listener
-//	    	        task.setOnResultsListener(ReviewActivity.this);
-//	    	        //prepare key value pairs to send
-//	    			String[] keyVals = {"rfid", rfidIn}; 
-//	    			//create AsyncTask, then execute
-//	    			AsyncTask<String, Void, JSONObject> serverResponse = null;
-//	    			serverResponse = task.execute(keyVals);
-//	    			checkCompletion = true;
-//	    	    } else {
-//	    			alertDialog.setMessage("You're not connected to the internet. Make sure this tablet is logged into a working Wifi Network.");
-//	    			alertDialog.show();
-//	    	    }
-//	        }
-			
-	     	/** update all text fields **/
-			//locate textViews in this layout
-	     	Resources res = getResources();
-	        title = (TextView)findViewById(R.id.title);
-	        mLevel = (TextView)findViewById(R.id.level);
-	        mScore = (TextView)findViewById(R.id.score);
-	        //mScoreFinal = (TextView)findViewById(R.id.score_final);
-	        mFabric = (TextView)findViewById(R.id.fabric);
-	        mAttempt = (TextView)findViewById(R.id.attempt);
-	     	
-	        //Set the TextView values for first review page
-	        mScore.setText(String.format(res.getString(R.string.score), score));
-	        //mScoreFinal.setText(String.format(res.getString(R.string.score), score));
-	        mFabric.setText(String.format(res.getString(R.string.fabric), fabric[0]));
-	        //for the level and attempt we add 1 here bc the database starts at level 0.
-	        mAttempt.setText(String.format(res.getString(R.string.attempt), String.valueOf(Integer.parseInt(slide_session[1])+1)));
-	        mLevel.setText(String.format(res.getString(R.string.level), String.valueOf(Integer.parseInt(slide_session[2])+1))); 
 	        
-	        setTextViewFont(Museo700Regular, title);
-	        setTextViewFont(Museo500Regular, mLevel, mScore, mFabric, mAttempt);
-	        
-	        //set them to visible
-	        title.setVisibility(View.VISIBLE);
-	        mLevel.setVisibility(View.VISIBLE);
-	        mScore.setVisibility(View.VISIBLE);
-	        //mScoreFinal.setVisibility(View.INVISIBLE);
-	        mFabric.setVisibility(View.VISIBLE);
-	        mAttempt.setVisibility(View.VISIBLE);
-	                
-	        //calculate ratios
-	        kineticToThermalRatioGoal = ((float)kineticGoal/(float)thermalGoal);
-	        kineticToThermalRatioMade = ((float)kineticMade/(float)thermalMade);
-	        
-	        if(kineticToThermalRatioGoal > kineticToThermalRatioMade){
-	        	tooMuchOomph = false;
-	        } else if (kineticToThermalRatioGoal < kineticToThermalRatioMade){
-	        	tooMuchOomph = true;
-	        }
-	        
-	        //print out everything we got and calculated.
-	        Log.d(TAG, "score: "+score);
-	        Log.d(TAG, "levelCompleted: "+levelCompleted);
-	        Log.d(TAG, "thermalGoal: "+String.valueOf(thermalGoal));
-	        Log.d(TAG, "kineticGoal: "+String.valueOf(kineticGoal));
-	        Log.d(TAG, "thermalMade: "+String.valueOf(thermalMade));
-	        Log.d(TAG, "kineticMade: "+String.valueOf(kineticMade));
-	        Log.d(TAG, "kineticToThermalRatioGoal: "+String.valueOf(kineticToThermalRatioGoal));
-	        Log.d(TAG, "kineticToThermalRatioMade: "+String.valueOf(kineticToThermalRatioMade));
-	        Log.d(TAG, "tooMuchOomph: "+String.valueOf(tooMuchOomph));
-	       
-	        resultImg = result_images;
-	        Log.d(TAG, ">>> RESULT_IMGS RECEIVED:");
-	        for(int i=0; i<resultImg.length; i++){
-	        	Log.d(TAG, resultImg[i].toString());
-	        }
-	        scoreImg = score_images;
-	        Log.d(TAG, ">>> SCORE_IMGS RECEIVED:");
-	        for(int i=0; i<scoreImg.length; i++){
-	        	Log.d(TAG, scoreImg[i].toString());
-	        }
+	//	        if(levelCompleted && !checkCompletion){ //this is temporary!!
+	//	    	    if (isNetworkAvailable()){
+	//	    		    task.cancel(true);
+	//	    		    //create a new async task for every time you hit login (each can only run once ever)
+	//	    		   	task = new SciGamesHttpPoster(ReviewActivity.this,"http://mysweetwebsite.com/pull/slide_results.php");
+	//	    		    //set listener
+	//	    	        task.setOnResultsListener(ReviewActivity.this);
+	//	    	        //prepare key value pairs to send
+	//	    			String[] keyVals = {"rfid", rfidIn}; 
+	//	    			//create AsyncTask, then execute
+	//	    			AsyncTask<String, Void, JSONObject> serverResponse = null;
+	//	    			serverResponse = task.execute(keyVals);
+	//	    			checkCompletion = true;
+	//	    	    } else {
+	//	    			alertDialog.setMessage("You're not connected to the internet. Make sure this tablet is logged into a working Wifi Network.");
+	//	    			alertDialog.show();
+	//	    	    }
+	//	        }
+				
+		     	/** update all text fields **/
+				//locate textViews in this layout
+		     	Resources res = getResources();
+		        title = (TextView)findViewById(R.id.title);
+		        mLevel = (TextView)findViewById(R.id.level);
+		        mScore = (TextView)findViewById(R.id.score);
+		        //mScoreFinal = (TextView)findViewById(R.id.score_final);
+		        mFabric = (TextView)findViewById(R.id.fabric);
+		        mAttempt = (TextView)findViewById(R.id.attempt);
+		     	
+		        //Set the TextView values for first review page
+		        mScore.setText(String.format(res.getString(R.string.score), score));
+		        //mScoreFinal.setText(String.format(res.getString(R.string.score), score));
+		        mFabric.setText(String.format(res.getString(R.string.fabric), fabric[0]));
+		        //for the level and attempt we add 1 here bc the database starts at level 0.
+		        mAttempt.setText(String.format(res.getString(R.string.attempt), String.valueOf(Integer.parseInt(slide_session[1])+1)));
+		        mLevel.setText(String.format(res.getString(R.string.level), String.valueOf(Integer.parseInt(slide_session[2])+1))); 
+		        
+		        setTextViewFont(Museo700Regular, title);
+		        setTextViewFont(Museo500Regular, mLevel, mScore, mFabric, mAttempt);
+		        
+		        //set them to visible
+		        title.setVisibility(View.VISIBLE);
+		        mLevel.setVisibility(View.VISIBLE);
+		        mScore.setVisibility(View.VISIBLE);
+		        //mScoreFinal.setVisibility(View.INVISIBLE);
+		        mFabric.setVisibility(View.VISIBLE);
+		        mAttempt.setVisibility(View.VISIBLE);
+		                
+		        //calculate ratios
+		        kineticToThermalRatioGoal = ((float)kineticGoal/(float)thermalGoal);
+		        kineticToThermalRatioMade = ((float)kineticMade/(float)thermalMade);
+		        
+		        if(kineticToThermalRatioGoal > kineticToThermalRatioMade){
+		        	tooMuchOomph = false;
+		        } else if (kineticToThermalRatioGoal < kineticToThermalRatioMade){
+		        	tooMuchOomph = true;
+		        }
+		        
+		        //print out everything we got and calculated.
+		        Log.d(TAG, "score: "+score);
+		        Log.d(TAG, "levelCompleted: "+levelCompleted);
+		        Log.d(TAG, "thermalGoal: "+String.valueOf(thermalGoal));
+		        Log.d(TAG, "kineticGoal: "+String.valueOf(kineticGoal));
+		        Log.d(TAG, "thermalMade: "+String.valueOf(thermalMade));
+		        Log.d(TAG, "kineticMade: "+String.valueOf(kineticMade));
+		        Log.d(TAG, "kineticToThermalRatioGoal: "+String.valueOf(kineticToThermalRatioGoal));
+		        Log.d(TAG, "kineticToThermalRatioMade: "+String.valueOf(kineticToThermalRatioMade));
+		        Log.d(TAG, "tooMuchOomph: "+String.valueOf(tooMuchOomph));
+		       
+		        resultImg = result_images;
+		        Log.d(TAG, ">>> RESULT_IMGS RECEIVED:");
+		        for(int i=0; i<resultImg.length; i++){
+		        	Log.d(TAG, resultImg[i].toString());
+		        }
+		        scoreImg = score_images;
+		        Log.d(TAG, ">>> SCORE_IMGS RECEIVED:");
+		        for(int i=0; i<scoreImg.length; i++){
+		        	Log.d(TAG, scoreImg[i].toString());
+		        }
+			}
 		}
 	}
 	
@@ -562,7 +574,7 @@ public class ReviewActivity extends Activity implements SciGamesListener{
 				mScore.setX(1060);
 				mScore.setY(647);
 				mScore.setHeight(50);
-				mScore.setVisibility(View.VISIBLE);
+				mScore.setVisibility(View.INVISIBLE); /**SCORE IS CURRENTLY INVISIBLE**/
 	    		//setCurrImg(scoreImg[scoreImgNum]);
 	    	}
 	    	

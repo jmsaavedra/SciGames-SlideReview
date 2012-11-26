@@ -8,16 +8,6 @@ byte infoToSend[5];
 int numBytesToSend = 5;
 boolean currLedStatus = false; //true==on
 
-/* slide sensor vars */
-#define SIG1_PIN  A5
-#define SIG2_PIN  A4
-#define SIG3_PIN  A3
-#define SIG4_PIN  A2
-int i, j;
-int sig_pins[] = {
-  SIG1_PIN, SIG2_PIN, SIG3_PIN, SIG4_PIN};
-
-
 AndroidAccessory acc("Joe Saavedra",
 "SG SlideGame Review",
 "SciGames Slide Review Board",
@@ -30,11 +20,7 @@ void setup() {
   Serial.begin(9600);  
   Serial.println("SETUP BEGIN...");
   initLeds();
-
-  for (i=0; i<(sizeof(sig_pins)/sizeof(int)); i++) {
-    digitalWrite(sig_pins[i], LOW);
-    pinMode(sig_pins[i], INPUT);
-  }
+  
   delay(500);   
   acc.powerOn();
   Serial.println("...SETUP DONE");
@@ -56,7 +42,6 @@ void checkForAndroidComm(){
     int len = acc.read(msgIn, sizeof(msgIn), 1);
 
     //    Serial.println( "len: " + len );
-
     if (len > 0) {
       Serial.println("-------msg------");
       Serial.print((char)msgIn[0]);

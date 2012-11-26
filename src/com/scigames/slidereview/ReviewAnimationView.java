@@ -716,7 +716,7 @@ class ReviewAnimationView extends SurfaceView implements SurfaceHolder.Callback 
             /***** Laser melting gold into piece molde *****/
             if(isScene3){ 
             	int energyRadius = 10;
-            	for(int i=0; i<thermalE-(int)elapsedTimeCount/25; i++){
+            	for(int i=0; i<thermalE-(int)elapsedTimeCount/5; i++){
             		//for(int j=0; j<thermalE/4;j++){
             			canvas.drawCircle(403, 530-(int)(i*energyRadius*2), energyRadius, mThermalPaint);
             		//}
@@ -768,7 +768,7 @@ class ReviewAnimationView extends SurfaceView implements SurfaceHolder.Callback 
             	int mDrillH = 300;
             	int energyRadius = 10;
             	
-            	for(int i=0; i<kineticE-(int)elapsedTimeCount/25; i++){
+            	for(int i=0; i<kineticE-(int)elapsedTimeCount/10; i++){
             		//for(int j=0; j<thermalE/4;j++){
             			canvas.drawCircle(92, 360-(int)(i*energyRadius*2), energyRadius, mKineticPaint);
             			long fillBarW = (int)(elapsedTimeCount/2);
@@ -776,7 +776,7 @@ class ReviewAnimationView extends SurfaceView implements SurfaceHolder.Callback 
                     		canvas.drawRect(mDrillX+50, mDrillY+135, mDrillX+50+fillBarW, mDrillY+135+60, mKineticPaint) ;
                     	} else{
                     		fillBarW = kineticE*10;
-                    		drillMoveTime = (int) (elapsedTimeCount/25);
+                    		drillMoveTime = (int) (elapsedTimeCount/10);
                     		Log.e(TAG, "drillMoveTime: "+ String.valueOf(drillMoveTime));
                     		Log.e(TAG, "elapsedTimeCount/100): "+ String.valueOf(elapsedTimeCount/25));
                     	}

@@ -305,6 +305,7 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
 		String levelCompleted = "null";
 		String score = "null";
 		String gameLevel = "null";
+		String session_valid = "null";
 		
 		slideSessionObj = response.getJSONObject("slide_session");
 		slideSessionId = slideSessionObj.getJSONObject("_id").getString("$id");
@@ -322,9 +323,10 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
 			thermal = energyObj.getString("thermal");
 			potential = energyObj.getString("potential");
 			fabricId = slideSessionObj.getJSONObject("fabric").getString("$id");
+			session_valid = slideSessionObj.getString("session_valid");
 		}
 		
-		String[] parsedSlideSession = {slideSessionId, attempt, gameLevel, levelCompleted, score, kinetic, thermal, potential, fabricId};
+		String[] parsedSlideSession = {slideSessionId, attempt, gameLevel, levelCompleted, score, kinetic, thermal, potential, fabricId, session_valid};
 		return parsedSlideSession;
 	}
 	
